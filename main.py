@@ -1,3 +1,4 @@
+import os
 from os import abort
 
 from flask import Flask, render_template, request, make_response, jsonify
@@ -335,7 +336,8 @@ def main():
         # Обработка некрректного запроса
         return make_response(jsonify({'error': 'Not found'}), 404)
 
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
