@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>
+        Книжные полки:
+        {% if books %}
+            книги
+        {% endif %}
+        {% if collections %}
+            коллекции
+        {% endif %}
+    </h1>
+
+
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <a href="/books" class="btn btn-sm btn-outline-secondary">
+                Книги
+            </a>
+        </div>
+        <div class="btn-group" role="group">
+            <a href="/collections" class="btn btn-sm btn-outline-secondary">
+                Коллекции
+            </a>
+        </div>
+    </div>
+
+
+    {% if books %}
+        {% for item in books %}
+            <div class="row border rounded" style="padding: 10px; margin: 10px">
+                <div class="col-md-8">
+                    <h2>{{ item.title }}</h2>
+                    <div>
+                        Добавил(а) - {{ item.user.name }}
+                    </div>
+                    <div>
+                        Дата добавления - {{ item.created_date }}
+                    </div>
+                </div>
+                {% if current_user.is_authenticated and current_user == item.user %}
+                    <div class="col-md-2">
+                        <a href="/book/{{ item.id }}" class="btn btn-sm btn-outline-secondary">
+                            Редактировать
+                        </a>
+                        <a href="/book_delete/{{ item.id }}" class="btn btn-sm btn-outline-secondary" style="margin-top: 10px">
+                            Удалить
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if current_user.is_authenticated %}
+            <div style="margin-top: 20px">
+                <a href="book" class="btn btn-secondary">Добавить книгу</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if collections %}
+        {% for item in collections %}
+            <div class="row border rounded" style="padding: 10px; margin: 10px">
+                <div class="col-md-8">
+                    <h2>{{ item.name }}</h2>
+                    <div>
+                        Добавил(а) - {{ item.user.name }}
+                    </div>
+                    <div>
+                        Дата добавления - {{ item.created_date }}
+                    </div>
+                </div>
+                {% if current_user.is_authenticated and current_user == item.user %}
+                    <div class="col-md-2">
+                        <a href="/collection/{{ item.id }}" class="btn btn-sm btn-outline-secondary">
+                            Редактировать
+                        </a>
+                        <a href="/collection_delete/{{ item.id }}" class="btn btn-sm btn-outline-secondary" style="margin-top: 10px">
+                            Удалить
+                        </a>
+                        <a href="/view_collection/{{ item.id }}" class="btn btn-sm btn-outline-secondary" style="margin-top: 10px">
+                            Просмотр коллекции
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if current_user.is_authenticated %}
+            <div style="margin-top: 20px">
+                <a href="collection" class="btn btn-secondary">Добавить коллекцию</a>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

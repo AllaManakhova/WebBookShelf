@@ -1,0 +1,23 @@
+from flask_wtf import FlaskForm
+from werkzeug.security import generate_password_hash, check_password_hash
+from wtforms import PasswordField, StringField, TextAreaField, SubmitField
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired
+
+
+class RegisterForm(FlaskForm):
+    # Форма для регистрации пользователя
+    email = EmailField('Почта', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
+    name = StringField('Имя пользователя', validators=[DataRequired()])
+    about = TextAreaField("Немного о себе")
+    submit = SubmitField('Войти')
+
+    def set_password(self, password):
+        # устанавливаем значение хэша пароля для переданной строки - для регистрации
+        self.hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        # проверяем правильность введённого пароля - для авторизации
+        return check_password_hash(self.hashed_password, password)
